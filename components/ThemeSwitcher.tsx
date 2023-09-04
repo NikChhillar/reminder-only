@@ -1,6 +1,6 @@
 "use client";
 
-import { LampDesk, MoonIcon, SunIcon } from "lucide-react";
+import {  MoonIcon, SunIcon } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -24,6 +24,7 @@ const ThemeSwitcher = () => {
         <TabsTrigger value="dark" onClick={(e) => setTheme("dark")}>
           <MoonIcon className="h-[1.2rem] w-[1.2rem] rotate-90 transition-all dark:rotate-0" />
         </TabsTrigger>
+       
       </TabsList>
     </Tabs>
   );
