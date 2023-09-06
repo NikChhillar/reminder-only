@@ -1,5 +1,10 @@
+import CollectionCard from "@/components/CollectionCard";
+import CreateCollection from "@/components/CreateCollection";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import { prisma } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs";
+import { File } from "lucide-react";
 import { Suspense } from "react";
 
 async function WelcomMsg() {
@@ -29,11 +34,49 @@ function WelcomeMsgFallBack() {
   );
 }
 
+async function CollectionList() {
+  const user = await currentUser();
+  const collections = await prisma.collection.findMany({
+    where: {
+      userId: user?.id,
+    },
+  });
+
+  if (collections.length === 0) {
+    return (
+      <div className="flex flex-col gap-5">
+        <Alert>
+          <File />
+          <AlertTitle>No task collections found...</AlertTitle>
+          <AlertDescription>
+            Create a task collection to get started...
+          </AlertDescription>
+        </Alert>
+        <CreateCollection />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <CreateCollection />
+      <div className="flex flex-col gap-4 mt-6">
+        {collections.map((collection) => (
+          <CollectionCard key={collection.id} collection={collection} />
+        ))}
+      </div>
+    </>
+  );
+}
+
 const DashboardPage = async () => {
   return (
     <>
       <Suspense fallback={<WelcomeMsgFallBack />}>
         <WelcomMsg />
+      </Suspense>
+      <Suspense fallback={<div>Loading task collections...</div>}>
+        <CollectionList />
       </Suspense>
     </>
   );
