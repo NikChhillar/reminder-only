@@ -1,6 +1,13 @@
-import React from 'react'
+import { Collection } from "@prisma/client";
 
-const CollectionCard = () => {
+
+interface Props {
+  collection: Collection & {
+    tasks: [];
+  };
+}
+
+const CollectionCard = ({ collection }: Props) => {
   return (
     <div>CollectionCard</div>
   )
