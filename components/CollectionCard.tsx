@@ -1,6 +1,6 @@
 "use client";
 
-import { Collection } from "@prisma/client";
+import { Collection, Task } from "@prisma/client";
 import {
   Collapsible,
   CollapsibleContent,
@@ -27,16 +27,19 @@ import {
 import { deleteCollection } from "@/actions/collections";
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
+import CreateTaskDialog from "./CreateTaskDialog";
 
 interface Props {
-  collection: Collection;
+  collection: Collection & {
+    tasks: Task[];
+  };
 }
-
-const tasks: string[] = ["1", "2", "3"];
 
 const CollectionCard = ({ collection }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+
+  const tasks = collection.tasks;
 
   const [isLoading, startTransition] = useTransition();
 
@@ -61,6 +64,11 @@ const CollectionCard = ({ collection }: Props) => {
 
   return (
     <>
+      <CreateTaskDialog
+        open={showCreateModal}
+        setOpen={setShowCreateModal}
+        collection={collection}
+      />
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <Button
@@ -82,8 +90,8 @@ const CollectionCard = ({ collection }: Props) => {
             <>
               <Progress className="rounded-none" value={50} />
               <div className="p-4 gap-3 flex flex-col">
-                {tasks.map((task, i) => (
-                  <TaskCard key={i} />
+                {tasks.map((task) => (
+                  <TaskCard key={task.id} />
                 ))}
               </div>
             </>
@@ -91,13 +99,15 @@ const CollectionCard = ({ collection }: Props) => {
 
           <Separator />
           <footer className="h-[40px] px-4 p-[2px] text-xs text-neutral-500 flex justify-between items-center ">
-            <p>
-              Created at {collection.createdAt.toLocaleDateString("en-US")}{" "}
-            </p>
+            <p>Created at {collection.createdAt.toLocaleDateString("en-US")}</p>
             {isLoading && <div>Deleting...</div>}
             {!isLoading && (
               <div>
-                <Button size={"icon"} variant={"ghost"}>
+                <Button
+                  size={"icon"}
+                  variant={"ghost"}
+                  onClick={() => setShowCreateModal(true)}
+                >
                   <Plus className="w-4 h-4" />
                 </Button>
                 <AlertDialog>
