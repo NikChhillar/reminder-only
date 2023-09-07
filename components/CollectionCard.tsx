@@ -6,7 +6,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { CollectionColor, CollectionColors } from "@/lib/constants";
@@ -37,6 +37,8 @@ const tasks: string[] = ["1", "2", "3"];
 const CollectionCard = ({ collection }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+
+  const [isLoading, startTransition] = useTransition();
 
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -92,33 +94,41 @@ const CollectionCard = ({ collection }: Props) => {
             <p>
               Created at {collection.createdAt.toLocaleDateString("en-US")}{" "}
             </p>
-            <div>
-              <Button size={"icon"} variant={"ghost"}>
-                <Plus className="w-4 h-4" />
-              </Button>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button size={"icon"} variant={"ghost"}>
-                    <Trash className="w-4 h-4" />
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogTitle>
-                    Delete this task collection..?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    You sure... you want to delete this..? This will permanently
-                    delete your collection and all tasks inside it.
-                  </AlertDialogDescription>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => removeCollection()}>
-                      Proceed
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
+            {isLoading && <div>Deleting...</div>}
+            {!isLoading && (
+              <div>
+                <Button size={"icon"} variant={"ghost"}>
+                  <Plus className="w-4 h-4" />
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button size={"icon"} variant={"ghost"}>
+                      <Trash className="w-4 h-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogTitle>
+                      Delete this task collection..?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      You sure... you want to delete this..? This will
+                      permanently delete your collection and all tasks inside
+                      it.
+                    </AlertDialogDescription>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => {
+                          startTransition(removeCollection);
+                        }}
+                      >
+                        Proceed
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            )}
           </footer>
         </CollapsibleContent>
       </Collapsible>
