@@ -86,9 +86,9 @@ export default function CreateCollectionSheet({ open, onOpenChange }: Props) {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Personal" {...field} />
+                    <Input placeholder="eg. Anime..." {...field} />
                   </FormControl>
-                  <FormDescription>Collection name</FormDescription>
+                  <FormDescription>Task collection name...</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -130,7 +130,7 @@ export default function CreateCollectionSheet({ open, onOpenChange }: Props) {
                     </Select>
                   </FormControl>
                   <FormDescription>
-                    Select a color for your collection
+                    Select a cool gradient color here...
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
