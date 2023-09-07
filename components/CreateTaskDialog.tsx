@@ -134,7 +134,7 @@ export default function CreateTaskDialog({ open, setOpen, collection }: Props) {
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {field.value && format(field.value, "PPP")}
-                            {!field.value && <span>No expiration</span>}
+                            {!field.value && <span>No deadline</span>}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent>
