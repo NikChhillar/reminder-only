@@ -31,6 +31,7 @@ import { Textarea } from "./ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { format } from "date-fns";
 import { Calendar } from "./ui/calendar";
+import { createTask } from "@/actions/tasks";
 
 interface Props {
   open: boolean;
@@ -55,6 +56,9 @@ export default function CreateTaskDialog({ open, setOpen, collection }: Props) {
 
   const onSubmit = async (data: createTaskSchemaType) => {
     try {
+        
+      await createTask(data);
+
       toast({
         title: "Success",
         description: "Task created successfully!!",

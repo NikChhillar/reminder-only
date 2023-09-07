@@ -6,7 +6,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { CollectionColor, CollectionColors } from "@/lib/constants";
@@ -62,6 +62,14 @@ const CollectionCard = ({ collection }: Props) => {
     }
   };
 
+  const tasksDone = useMemo(() => {
+    return collection.tasks.filter((task) => task.done).length;
+  }, [collection.tasks]);
+
+  const totalTasks = collection.tasks.length;
+
+  const progress = totalTasks === 0 ? 0 : (tasksDone / totalTasks) * 100;
+
   return (
     <>
       <CreateTaskDialog
@@ -85,13 +93,29 @@ const CollectionCard = ({ collection }: Props) => {
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="flex rounded-b-md flex-col dark:bg-neutral-900 shadow-lg">
-          {tasks.length === 0 && <div>No tasks</div>}
+          {tasks.length === 0 && (
+            <Button
+              variant={"ghost"}
+              className="flex flex-col items-center justify-center gap-1 p-8 py-12 rounded-none"
+              onClick={() => setShowCreateModal(true)}
+            >
+              <p>No tasks here...</p>
+              <span
+                className={cn(
+                  "text-sm bg-clip-text text-transparent",
+                  CollectionColors[collection.color as CollectionColor]
+                )}
+              >
+                Create first task in {collection.name}
+              </span>
+            </Button>
+          )}
           {tasks.length > 0 && (
             <>
-              <Progress className="rounded-none" value={50} />
+              <Progress className="rounded-none" value={progress} />
               <div className="p-4 gap-3 flex flex-col">
                 {tasks.map((task) => (
-                  <TaskCard key={task.id} />
+                  <TaskCard key={task.id} task={task} />
                 ))}
               </div>
             </>
