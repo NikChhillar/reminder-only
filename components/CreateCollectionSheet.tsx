@@ -9,11 +9,13 @@ export default function CreateCollectionSheet({ open, onOpenChange }: Props) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
-        <SheetHeader>Add new collection...</SheetHeader>
-        <SheetDescription>
-          Create collections for your tasks like anime collection, coding
-          collection...
-        </SheetDescription>
+        <SheetHeader>
+          <SheetHeader>Add new collection...</SheetHeader>
+          <SheetDescription>
+            Create collections for your tasks like anime collection, coding
+            collection...
+          </SheetDescription>
+        </SheetHeader>
       </SheetContent>
     </Sheet>
   );
