@@ -27,7 +27,7 @@ function WelcomeMsgFallBack() {
   return (
     <div className="flex w-full mb-12">
       <h1 className="text-4xl font-bold">
-        <Skeleton className="w-[180px] h-[36px]" />
+        <Skeleton className="w-[180px] h-[36px] mb-1" />
         <Skeleton className="w-[250px] h-[36px]" />
       </h1>
     </div>
