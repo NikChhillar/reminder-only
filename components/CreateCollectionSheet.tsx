@@ -29,6 +29,7 @@ import { CollectionColors, CollectionColor } from "@/lib/constants";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
+import { createCollection } from "@/actions/collections";
 
 interface Props {
   open: boolean;
@@ -45,17 +46,19 @@ export default function CreateCollectionSheet({ open, onOpenChange }: Props) {
 
   const onSubmit = async (data: createCollectionSchemaType) => {
     try {
+      await createCollection(data);
+
       openChangeWrapper(false);
       router.refresh();
 
       toast({
         title: "Success",
-        description: "Collection created successfully!",
+        description: "Task collection created successfully!",
       });
     } catch (e) {
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again later",
+        description: "Failed to create task collection...",
         variant: "destructive",
       });
       console.log("Error while creating collection", e);
