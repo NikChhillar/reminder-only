@@ -26,7 +26,7 @@ export async function createTask(data: createTaskSchemaType) {
   });
 }
 
-export async function setTaskDone(id: number) {
+export async function setTaskDone(id: string) {
   const user = await currentUser();
   if (!user) {
     throw new Error("user not found...");
